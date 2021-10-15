@@ -7,6 +7,9 @@ from telegram import *
 from telegram.ext import *
 from requests import *
 
+import os
+PORT = int(os.environ.get('PORT', 5000))
+
 # credentialData = credentials.Certificate("credentials.json")
 # firebase_admin.initialize_app(credentialData)
 #
@@ -119,6 +122,11 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, messageHandler))
 
     updater.start_polling()
+    
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=token)
+    updater.bot.setWebhook('https://yourherokuappname.herokuapp.com/' + token)
 
     updater.idle()
 
