@@ -1,4 +1,1 @@
 python-telegram-bot==13.7
-telegram==0.0.1
-request==2.26.0
-logging==0.4.9.6
