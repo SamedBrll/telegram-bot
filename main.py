@@ -1,23 +1,12 @@
 import logging
-
-import firebase_admin
-from firebase_admin import credentials, firestore
-
 from telegram import *
 from telegram.ext import *
 from requests import *
-
 import os
+
 PORT = int(os.environ.get('PORT', 5000))
 
-# credentialData = credentials.Certificate("credentials.json")
-# firebase_admin.initialize_app(credentialData)
-#
-# firestoreDb = firestore.client()
-#
-# snapshots = list(firestoreDb.collection(u'test').get())
-# for snap in snapshots:
-#     print(snap.to_dict())
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -62,18 +51,10 @@ def hadi(update, context):
 
 
 
-def echo(update, context):
-    update.message.reply_text(update.message.text)
-
-
 
 def bebek(update, context):
     update.message.reply_text('https://www.instagram.com/asiyenurzenginn/')
 
-
-# def kaydet(update, context):
-#     update.message.reply_text('kayıt tamamlandı')
-#     firestoreDb.collection(u'test').add({'kayıt1'})
 
 def resim(update: Update, context: CallbackContext):
     buttons = [[KeyboardButton(randomImageText)], [KeyboardButton(randomPeopleText)]]
@@ -113,7 +94,6 @@ def main():
     dp.add_handler(CommandHandler("bebek", bebek))
     dp.add_handler(CommandHandler("naber", naber))
 
-    dp.add_handler(MessageHandler(Filters.text, echo))
 
     dp.add_error_handler(error)
 
@@ -121,12 +101,10 @@ def main():
     dp.add_handler(option_handler)
     dp.add_handler(MessageHandler(Filters.text, messageHandler))
 
-    updater.start_polling()
-    
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=token)
-    updater.bot.setWebhook('https://yourherokuappname.herokuapp.com/' + token)
+    updater.bot.setWebhook('https://telegrambotsamyo.herokuapp.com/' + token)
 
     updater.idle()
 
