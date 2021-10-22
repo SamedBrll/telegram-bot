@@ -1,3 +1,2 @@
 python-telegram-bot==13.7
-pip install requests
-pip freeze > requirements.txt
+pip3 install requests
