@@ -1,6 +1,6 @@
 import logging
 from telegram import *
-from telegram.ext import *
+from telegram.ext import CallbackContext,Updater,CommandHandler,MessageHandler,Filters
 from requests import *
 import os
 
