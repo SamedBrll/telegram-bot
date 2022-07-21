@@ -1,111 +1,63 @@
 import logging
-from telegram import *
-from telegram.ext import CallbackContext,Updater,CommandHandler,MessageHandler,Filters
-from requests import *
-import os
 
-PORT = int(os.environ.get('PORT', 8443))
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
+BOT_TOKEN = "5451842728:AAE3NmpugRkOyUE94EjHHNNVppSk35pRiec"
 
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
+# Enable logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-Deneme1 = "deneme1"
-Deneme2 = "deneme2"
-
-name = ""
-
-randomPeopleText = "Rastgele İnsan"
-randomImageText = "Rastgele Resim"
-
-randomPeopleUrl = "https://thispersondoesnotexist.com/image"
-randomPImageUrl = "https://picsum.photos/1200"
-
-
-deneme1sec = 'deneme1 basıldı'
-
-buton1='1'
-buton2='2'
 
 def start(update, context):
-    update.message.reply_text('Başladık hadi hayırlısı')
-
-
-def listele(update, context):
-    update.message.reply_text()
+    """Send a message when the command /start is issued."""
+    update.message.reply_text('Hi!')
 
 
 def help(update, context):
-    update.message.reply_text('Yardım geliyor')
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('Help!')
 
 
-def naber(update, context):
-    update.message.reply_text(f'iyi {update.effective_user.first_name} senden')
-
-
-def hadi(update, context):
-    update.message.reply_text(f'{update.effective_user.first_name} kime sövmemi istersin ?')
-
-
-
-
-def bebek(update, context):
-    update.message.reply_text('https://www.instagram.com/asiyenurzenginn/')
-
-
-def resim(update: Update, context: CallbackContext):
-    buttons = [[KeyboardButton(randomImageText)], [KeyboardButton(randomPeopleText)]]
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Botuma Hoş Geldin!",
-                             reply_markup=ReplyKeyboardMarkup(buttons))
-
-
-def messageHandler(update: Update, context: CallbackContext):
-    if randomPeopleText in update.message.text:
-        image = get(randomPeopleUrl).content
-    if randomImageText in update.message.text:
-        image = get(randomPImageUrl).content
-
-    if image:
-        context.bot.sendMediaGroup(chat_id=update.effective_chat.id, media=[InputMediaPhoto(image, caption="")])
-
-        buttons = [[InlineKeyboardButton("👍", callback_data="like")], [InlineKeyboardButton("👎", callback_data="dislike")]]
-        context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons),
-                                 text="Resmi beğendin mi?")
+def echo(update, context):
+    """Echo the user message."""
+    # update.message.text
+    update.message.reply_text("/mekan_ekle ile mekan ekleyin")
 
 
 def error(update, context):
+    """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
 def main():
-    token = "2009712769:AAG71lr8rnSwO4GNaxrEl7Fi5o2N7IV5r9Y"
-    updater = Updater(token, use_context=True)
+    """Start the bot."""
+    # Create the Updater and pass it your bot's token.
+    # Make sure to set use_context=True to use the new context based callbacks
+    # Post version 12 this will no longer be necessary
+    updater = Updater(BOT_TOKEN, use_context=True)
 
+    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("listele", listele))
-    # dp.add_handler(CommandHandler("kaydet", kaydet))
-    dp.add_handler(CommandHandler("hadi", hadi))
-    dp.add_handler(CommandHandler("bebek", bebek))
-    dp.add_handler(CommandHandler("naber", naber))
 
+    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(MessageHandler(Filters.text, echo))
 
+    # log all errors
     dp.add_error_handler(error)
 
-    option_handler = CommandHandler("resim", resim)
-    dp.add_handler(option_handler)
-    dp.add_handler(MessageHandler(Filters.text, messageHandler))
+    # Start the Bot
+    updater.start_polling()
 
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=token)
-    updater.bot.setWebhook('https://telegrambotsamyo.herokuapp.com/' + token)
-
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
 
