@@ -24,7 +24,7 @@ def help(update, context):
 def echo(update, context):
     """Echo the user message."""
     # update.message.text
-    update.message.reply_text("/mekan_ekle ile mekan ekleyin")
+    update.message.reply_text("Yanlış Komut Girdiniz!")
 
 
 def error(update, context):
