@@ -1,8 +1,26 @@
 import logging
 
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
+import pyrebase
 
 BOT_TOKEN = "5451842728:AAE3NmpugRkOyUE94EjHHNNVppSk35pRiec"
+
+config = {
+    "apiKey": "AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k",
+    "authDomain": "botdeneme-10ce5.firebaseapp.com",
+    "projectId": "botdeneme-10ce5",
+    "databaseURL": "https://botdeneme-10ce5-default-rtdb.firebaseio.com/",
+    "storageBucket": "botdeneme-10ce5.appspot.com",
+    "messagingSenderId": "218270457281",
+    "appId": "1:218270457281:web:1bf2ac1d283071d159a340"
+}
+
+firebase = pyrebase.initialize_app(config)
+
+db = firebase.database()
+
+izle = db.child("sayılar").child("revir").get()
+print(izle.val())
 
 # Enable logging
 logging.basicConfig(
@@ -13,13 +31,35 @@ logger = logging.getLogger(__name__)
 
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    firebase = pyrebase.initialize_app(config)
+
+    db = firebase.database()
+
+
+    izle = db.child("sayılar").child("revir").get()
+    print(izle.val())
+    update.message.reply_text(izle.val())
 
 
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
+def sıfırla(update, context):
+    db.child("sayılar").child("revir").update({"Muayene":0},"AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k")
+    db.child("sayılar").child("revir").update({"Sevk": 0}, "AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k")
+    update.message.reply_text("Güncelleme Tamamlandı")
+
+
+def yenileM(update, context):
+    izleM = db.child("sayılar").child("revir").child("Muayene").get()
+    db.child("sayılar").child("revir").update({"Muayene":(izleM.val())+1},"AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k")
+    update.message.reply_text("Güncelleme Tamamlandı")
+
+def yenileS(update, context):
+    izleM = db.child("sayılar").child("revir").child("Sevk").get()
+    db.child("sayılar").child("revir").update({"Sevk":(izleM.val())+1},"AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k")
+    update.message.reply_text("Güncelleme Tamamlandı")
 
 def echo(update, context):
     """Echo the user message."""
@@ -43,9 +83,11 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("durum", start))
     dp.add_handler(CommandHandler("help", help))
-
+    dp.add_handler(CommandHandler("MuayeneEkle", yenileM))
+    dp.add_handler(CommandHandler("SevkEkle", yenileS))
+    dp.add_handler(CommandHandler("a", sıfırla))
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
 
