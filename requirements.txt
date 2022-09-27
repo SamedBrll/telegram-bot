@@ -1,4 +1,4 @@
 python-telegram-bot
 telegram
 pip
-pyrebase
+pyrebase==3.0.0
