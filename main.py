@@ -43,9 +43,9 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text(print("Merhaba,aktif komutlar :\n/Durum => Güncel Sayılar\n/MuayeneEkle => 1 Adet Muayene Ekler\n"
+    update.message.reply_text("Merhaba,aktif komutlar :\n/Durum => Güncel Sayılar\n/MuayeneEkle => 1 Adet Muayene Ekler\n"
                               "/SevkEkle => 1 Adet Sevk Ekler\n/Bilgi => Aktif Komutları Görmeye Yarar\n"
-                              "/Reset => Muayene Ve Sevk Sayılarını Sıfırlar"))
+                              "/Reset => Muayene Ve Sevk Sayılarını Sıfırlar")
 
 
 def sıfırla(update, context):
