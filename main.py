@@ -43,7 +43,10 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    update.message.reply_text(print("Merhaba,aktif komutlar :\n/Durum => Güncel Sayılar\n/MuayeneEkle => 1 Adet Muayene Ekler\n"
+                              "/SevkEkle => 1 Adet Sevk Ekler\n/Bilgi => Aktif Komutları Görmeye Yarar\n"
+                              "/Reset => Muayene Ve Sevk Sayılarını Sıfırlar"))
+
 
 def sıfırla(update, context):
     db.child("sayılar").child("revir").update({"Muayene":0},"AIzaSyD09Mgieo4a-u-WOtnQRiCyrwbrqd8KS-k")
@@ -83,11 +86,11 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("durum", start))
-    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("Durum", start))
+    dp.add_handler(CommandHandler("Bilgi", help))
     dp.add_handler(CommandHandler("MuayeneEkle", yenileM))
     dp.add_handler(CommandHandler("SevkEkle", yenileS))
-    dp.add_handler(CommandHandler("a", sıfırla))
+    dp.add_handler(CommandHandler("Reset", sıfırla))
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
 
